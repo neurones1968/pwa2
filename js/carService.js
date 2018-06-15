@@ -1,21 +1,39 @@
 import { appendCars } from "./template.js";
 import * as clientStorage from "./clientStorage.js";
 
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const apiUrlPath =
   "https://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/";
 const apiUrlLatest = `${apiUrlPath}latest-deals.php`;
 const apiUrlCar = `${apiUrlPath}car.php?carId=`;
 
 export const loadMoreRequest = async () => {
-  const data = await (await fetch(
-    `${apiUrlLatest}?carId=${clientStorage.getLastCarId()}`
-  )).json();
-  const { cars } = data;
+  document.getElementById("connection-status").innerHTML = await fetching();
 
-  await clientStorage.addCars(cars);
-  loadMore(cars);
+  loadMore();
+};
 
-  console.log(cars[cars.length - 1].key);
+const fetching = async () => {
+  try {
+    const data = await Promise.race([
+      fetch(`${apiUrlLatest}?carId=${clientStorage.getLastCarId()}`).then(r =>
+        r.json()
+      ),
+      wait(3000)
+    ]);
+
+    if (!data) {
+      return "The connection is hanging, showing offline results";
+    }
+
+    const { cars } = data;
+
+    await clientStorage.addCars(cars);
+    return "the connection is OK, showing latest results";
+  } catch (e) {
+    return "No connection, showing offline results";
+  }
 };
 
 const loadMore = async () => {
