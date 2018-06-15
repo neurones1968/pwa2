@@ -5,7 +5,7 @@ CACHE:
 js/app.js
 js/carService.js
 js/clientStorage.js
-# js/swRegister.js
+js/swRegister.js
 js/template.js
 resources/es6-promise/es6-promise.js
 resources/es6-promise/es6-promise.map
