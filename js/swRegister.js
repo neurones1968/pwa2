@@ -3,6 +3,10 @@
     return;
   }
 
+  navigator.serviceWorker.addEventListener("controllerchange", e => {
+    console.log("Controller Changed!");
+  });
+
   try {
     const swRegistration = await navigator.serviceWorker.register("sw.js", {
       scope: ""
@@ -25,6 +29,17 @@
         console.log(e.target.state);
       });
     }
+
+    swRegistration.addEventListener("updatefound", e => {
+      swRegistration.installing.addEventListener("statechange", e => {
+        console.log("New service worker state: ", e.target.state);
+      });
+      console.log("New service worker found!", swRegistration);
+    });
+
+    setInterval(() => {
+      swRegistration.update();
+    }, 5000);
   } catch (e) {
     console.warn("ServiceWorker registration has failed.", e);
   }

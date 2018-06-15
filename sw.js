@@ -28,6 +28,7 @@ const carDealsCacheFiles = [
 
 self.addEventListener("install", event => {
   console.log('From SW: Install Event"', event);
+  self.skipWaiting();
 
   event.waitUntil(
     (async () => {
@@ -39,6 +40,7 @@ self.addEventListener("install", event => {
 
 self.addEventListener("activate", event => {
   console.log("From SW: Activate State", event);
+  self.clients.claim();
 
   event.waitUntil(
     (async () => {
