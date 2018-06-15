@@ -117,3 +117,13 @@ const networkFirstStrategy = async request => {
     return caches.match(request);
   }
 };
+
+/*self.addEventListener('message', function(event) {
+  var sourceID = event.source ? event.source.id : 'unknown';
+  event.waitUntil(
+    event.source.postMessage({
+        sourceID: sourceID,
+        message: 'sw:' + event.data
+      })
+  );
+});*/

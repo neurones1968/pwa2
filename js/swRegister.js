@@ -39,7 +39,11 @@
 
     setInterval(() => {
       swRegistration.update();
-    }, 5000);
+    }, 1000 * 60 * 60);
+
+    // if (navigator.serviceWorker.controller) {
+    //   navigator.serviceWorker.controller.postMessage("hello");
+    // }
   } catch (e) {
     console.warn("ServiceWorker registration has failed.", e);
   }
