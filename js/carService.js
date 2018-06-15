@@ -30,12 +30,27 @@ const fetching = async () => {
     const { cars } = data;
 
     await clientStorage.addCars(cars);
+    Promise.all(cars.map(preCacheDetailsPage));
     return "the connection is OK, showing latest results";
   } catch (e) {
     return "No connection, showing offline results";
   }
 };
 
+const preCacheDetailsPage = async car => {
+  if (!"serviceWorker" in navigator) {
+    return;
+  }
+
+  const carDefailsUrl = apiUrlCar + car.value.details_id;
+
+  const cache = await window.caches.open("carDealsCachePagesV1");
+  const response = await cache.match(carDefailsUrl);
+
+  if (!response) {
+    cache.add(new Request(carDefailsUrl));
+  }
+};
 const loadMore = async () => {
   const cars = await clientStorage.getCars();
 
