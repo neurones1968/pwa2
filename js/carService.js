@@ -1,18 +1,27 @@
 import { appendCars } from "./template.js";
+import * as clientStorage from "./clientStorage.js";
 
 const apiUrlPath =
   "https://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/";
 const apiUrlLatest = `${apiUrlPath}latest-deals.php`;
 const apiUrlCar = `${apiUrlPath}car.php?carId=`;
 
-let lastCarID;
 export const loadMoreRequest = async () => {
-  const data = await (await fetch(apiUrlLatest + "?carId=" + lastCarID)).json();
+  const data = await (await fetch(
+    `${apiUrlLatest}?carId=${clientStorage.getLastCarId()}`
+  )).json();
   const { cars } = data;
 
-  appendCars(cars);
+  await clientStorage.addCars(cars);
+  loadMore(cars);
+
   console.log(cars[cars.length - 1].key);
-  lastCarID = cars[cars.length - 1].key;
+};
+
+const loadMore = async () => {
+  const cars = await clientStorage.getCars();
+
+  appendCars(cars);
 };
 
 export const loadCarPage = async carId => {

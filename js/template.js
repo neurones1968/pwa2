@@ -12,10 +12,7 @@ function generateCarCard(car) {
 export function appendCars(cars) {
   document.getElementById("first-load").innerHTML = "";
 
-  const cardHTML = cars
-    .map(item => item.value)
-    .map(generateCarCard)
-    .join("");
+  const cardHTML = cars.map(generateCarCard).join("");
 
   document.querySelector(".mdl-grid").insertAdjacentHTML("beforeend", cardHTML);
   //Force Redraw Fix for IE
