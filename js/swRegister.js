@@ -4,7 +4,9 @@
   }
 
   try {
-    const swRegistration = await navigator.serviceWorker.register("sw.js");
+    const swRegistration = await navigator.serviceWorker.register("sw.js", {
+      scope: ""
+    });
     let serviceWorker;
 
     if (swRegistration.installing) {
